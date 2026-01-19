@@ -22,6 +22,8 @@ import { ListItemInstance } from '../m365/spo/commands/listitem/ListItemInstance
 import { ListItemFieldValueResult } from '../m365/spo/commands/listitem/ListItemFieldValueResult.js';
 import { FileProperties } from '../m365/spo/commands/file/FileProperties.js';
 import { timersUtil } from './timersUtil.js';
+import { DefaultColumnValue } from '../m365/spo/commands/list/DefaultColumnValue.js';
+import { DOMParser } from '@xmldom/xmldom';
 
 export interface ContextInfo {
   FormDigestTimeoutSeconds: number;
@@ -1694,7 +1696,7 @@ export const spo = {
   * @param verbose If in verbose mode
   * @returns The updated list item object
   */
-  async systemUpdateListItem(absoluteListUrl: string, itemId: string, logger: Logger, verbose: boolean, properties?: object, contentTypeName?: string): Promise<ListItemInstance> {
+  async systemUpdateListItem(absoluteListUrl: string, itemId: number, logger: Logger, verbose: boolean, properties?: object, contentTypeName?: string): Promise<ListItemInstance> {
     if (!properties && !contentTypeName) {
       // Neither properties nor contentTypeName provided, no need to proceed
       throw 'Either properties or contentTypeName must be provided for systemUpdateListItem.';
@@ -1772,10 +1774,8 @@ export const spo = {
       throw `Error occurred in systemUpdate operation - ${response}`;
     }
 
-    const id = Number(itemId);
-
     const requestOptionsItems: CliRequestOptions = {
-      url: `${absoluteListUrl}/items(${id})`,
+      url: `${absoluteListUrl}/items(${itemId})`,
       headers: {
         'accept': 'application/json;odata=nometadata'
       },
@@ -2392,5 +2392,38 @@ export const spo = {
     roleDefinition.RoleTypeKindValue = RoleType[roleDefinition.RoleTypeKind];
 
     return roleDefinition;
+  },
+
+  /**
+   * Converts SharePoint default column values XML to a structured JSON array.
+   * Parses the XML content from client_LocationBasedDefaults.html file and extracts
+   * default field values configured for folders in a SharePoint document library.
+   *
+   * @param xml The XML string containing default column value definitions
+   * @returns An array of default column values with field names, values, and associated folder URLs
+   */
+  convertDefaultColumnXmlToJson(xml: string): DefaultColumnValue[] {
+    const results: DefaultColumnValue[] = [];
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'application/xml');
+
+    const folderLinks = doc.getElementsByTagName('a');
+    for (let i = 0; i < folderLinks.length; i++) {
+      const folderUrl = folderLinks[i].getAttribute('href')!;
+      const defaultValues = folderLinks[i].getElementsByTagName('DefaultValue');
+
+      for (let j = 0; j < defaultValues.length; j++) {
+        const fieldName = defaultValues[j].getAttribute('FieldName')!;
+        const fieldValue = defaultValues[j].textContent!;
+
+        results.push({
+          fieldName: fieldName,
+          fieldValue: fieldValue,
+          folderUrl: decodeURIComponent(folderUrl)
+        });
+      }
+    }
+    return results;
   }
 };

@@ -2166,6 +2166,11 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'doc',
+              label: 'container recyclebinitem remove',
+              id: 'cmd/spe/container/container-recyclebinitem-remove'
+            },
+            {
+              type: 'doc',
               label: 'container recyclebinitem restore',
               id: 'cmd/spe/container/container-recyclebinitem-restore'
             }
@@ -3068,6 +3073,11 @@ const sidebars: SidebarsConfig = {
               type: 'doc',
               label: 'list defaultvalue clear',
               id: 'cmd/spo/list/list-defaultvalue-clear'
+            },
+            {
+              type: 'doc',
+              label: 'list defaultvalue get',
+              id: 'cmd/spo/list/list-defaultvalue-get'
             },
             {
               type: 'doc',
