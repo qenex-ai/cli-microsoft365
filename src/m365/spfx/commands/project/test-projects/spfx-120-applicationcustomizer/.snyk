@@ -1,0 +1,20 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:minimatch:20160620':
+    - '@microsoft/sp-build-web > @microsoft/sp-build-core-tasks > @microsoft/gulp-core-build-webpack > gulp > vinyl-fs > glob-stream > glob > minimatch':
+        patched: '2026-01-20T05:15:40.318Z'
+        id: 'npm:minimatch:20160620'
+        path: >-
+          @microsoft/sp-build-web > @microsoft/sp-build-core-tasks >
+          @microsoft/gulp-core-build-webpack > gulp > vinyl-fs > glob-stream >
+          glob > minimatch
+    - '@microsoft/sp-build-web > @microsoft/sp-build-core-tasks > @microsoft/gulp-core-build-webpack > @microsoft/gulp-core-build > gulp > vinyl-fs > glob-stream > glob > minimatch':
+        patched: '2026-01-20T05:15:40.318Z'
+        id: 'npm:minimatch:20160620'
+        path: >-
+          @microsoft/sp-build-web > @microsoft/sp-build-core-tasks >
+          @microsoft/gulp-core-build-webpack > @microsoft/gulp-core-build > gulp
+          > vinyl-fs > glob-stream > glob > minimatch
