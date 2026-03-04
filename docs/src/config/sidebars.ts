@@ -2379,6 +2379,15 @@ const sidebars: SidebarsConfig = {
           ]
         },
         {
+          brandcenter: [
+            {
+              type: 'doc',
+              label: 'brandcenter settings list',
+              id: 'cmd/spo/brandcenter/brandcenter-settings-list'
+            }
+          ]
+        },
+        {
           cdn: [
             {
               type: 'doc',
@@ -4332,6 +4341,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           callrecord: [
+            {
+              type: 'doc',
+              label: 'callrecord get',
+              id: 'cmd/teams/callrecord/callrecord-get'
+            },
             {
               type: 'doc',
               label: 'callrecord list',
